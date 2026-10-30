@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Soul of the Harmonium</title>
+  <meta name="description" content="A cinematic, scroll-driven journey through the harmonium: its history, anatomy, mechanism, playing technique and place in South Asian musical life.">
+  <meta name="theme-color" content="#F6F0E5">
+
+  <!-- Fonts (Google Fonts). If offline, the CSS falls back to Georgia / system sans-serif. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- GSAP + ScrollTrigger: local copies first (work offline). If they are missing, script.js
+       loads them from the cdnjs CDN, and if that fails too it switches to a CSS-only mode. -->
+  <script defer src="assets/vendor/gsap.min.js"></script>
+  <script defer src="assets/vendor/ScrollTrigger.min.js"></script>
+  <script defer src="script.js"></script>
+</head>
+
+<body data-theme="ivory" data-section="1">
+  <a class="skip-link" href="#story">Skip to the story</a>
+
+  <!-- Scroll progress -->
+  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+  <!-- Header / navigation -->
+  <header class="site-header">
+    <a class="brand" href="#hero" data-scroll aria-label="The Soul of the Harmonium, back to the start">
+      <span class="brand-mark" aria-hidden="true">&#9834;</span><span class="brand-name">Harmonium</span>
+    </a>
+    <nav class="main-nav" id="main-nav" aria-label="Primary">
+      <ul>
+        <li><a href="#hero" data-scroll>Intro</a></li>
+        <li><a href="#history" data-scroll>History</a></li>
+        <li><a href="#anatomy" data-scroll>Anatomy</a></li>
+        <li><a href="#mechanism" data-scroll>Mechanism</a></li>
+        <li><a href="#play" data-scroll>Play</a></li>
+        <li><a href="#culture" data-scroll>Culture</a></li>
+        <li><a href="#finale" data-scroll>Finale</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <!-- Section dots -->
+  <nav class="dots" id="dots" aria-label="Story sections"></nav>
+
+  <!-- Fixed background: colour wash, spotlight, grain and parallax ornaments -->
+  <div class="bg" aria-hidden="true">
+    <div class="bg-wash"></div>
+    <div class="bg-deco">
+      <svg class="deco deco-staff" data-speed="0.06" viewBox="0 0 1200 160" preserveAspectRatio="none">
+        <g fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M0 40 C300 20 600 60 1200 30"/><path d="M0 60 C300 40 600 80 1200 50"/><path d="M0 80 C300 60 600 100 1200 70"/>
+          <path d="M0 100 C300 80 600 120 1200 90"/><path d="M0 120 C300 100 600 140 1200 110"/>
+        </g>
+        <g fill="currentColor"><ellipse cx="260" cy="88" rx="9" ry="6.5" transform="rotate(-18 260 88)"/><ellipse cx="420" cy="66" rx="9" ry="6.5" transform="rotate(-18 420 66)"/><ellipse cx="610" cy="96" rx="9" ry="6.5" transform="rotate(-18 610 96)"/><ellipse cx="840" cy="62" rx="9" ry="6.5" transform="rotate(-18 840 62)"/></g>
+        <g stroke="currentColor" stroke-width="1.6"><path d="M268 85 V36"/><path d="M428 63 V14"/><path d="M618 93 V44"/><path d="M848 59 V10"/></g>
+      </svg>
+      <span class="deco deco-note n1" data-speed="0.14">&#9835;</span>
+      <span class="deco deco-note n2" data-speed="0.09">&#9834;</span>
+      <span class="deco deco-note n3" data-speed="0.18">&#9833;</span>
+      <span class="deco deco-note n4" data-speed="0.11">&#9835;</span>
+      <span class="deco deco-ring r1" data-speed="0.07"></span>
+      <span class="deco deco-ring r2" data-speed="0.13"></span>
+    </div>
+    <div class="bg-grain"></div>
+  </div>
+
+  <!-- Mobile only: soft cover so text scrolls beneath the instrument instead of through it -->
+  <div class="veil" aria-hidden="true"></div>
+
+  <!--
+    THE ONE HARMONIUM.
+    A single fixed stage holds a single instrument. script.js moves #harmonium (x, y, scale, rotation)
+    in sync with scroll; #hm-depth adds a gentle "fly-by" scale pulse; #hm-float adds the idle float.
+  -->
+  <div class="stage" id="stage">
+    <div class="harmonium" id="harmonium">
+      <div class="hm-glow"></div>
+      <div class="hm-depth" id="hm-depth">
+        <div class="hm-float" id="hm-float">
+          <!-- Built-in illustration (also saved as assets/harmonium.svg). Replaced automatically if assets/harmonium.webp or .png exists. -->
+          <svg id="hm-svg" class="hm-art" xmlns="http://www.w3.org/2000/svg" viewBox="95 205 830 405" role="img" aria-label="Illustration of a traditional Indian harmonium">
+<defs>
+  <linearGradient id="hm-front" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#84512f"/><stop offset="0.55" stop-color="#5f3720"/><stop offset="1" stop-color="#43251a"/>
+  </linearGradient>
+  <linearGradient id="hm-side" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#4b2a19"/><stop offset="1" stop-color="#33190f"/>
+  </linearGradient>
+  <linearGradient id="hm-top" x1="0" y1="1" x2="1" y2="0">
+    <stop offset="0" stop-color="#7d4b2b"/><stop offset="1" stop-color="#a06a40"/>
+  </linearGradient>
+  <linearGradient id="hm-fascia" x1="0" y1="1" x2="0" y2="0">
+    <stop offset="0" stop-color="#8f5c36"/><stop offset="1" stop-color="#6a4023"/>
+  </linearGradient>
+  <linearGradient id="hm-leather" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#6b2c22"/><stop offset="1" stop-color="#3f1712"/>
+  </linearGradient>
+  <linearGradient id="hm-leatherSide" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#4a1d17"/><stop offset="1" stop-color="#2c0f0b"/>
+  </linearGradient>
+  <linearGradient id="hm-ivory" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fffaf0"/><stop offset="1" stop-color="#eadcc0"/>
+  </linearGradient>
+  <linearGradient id="hm-ebony" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#342c27"/><stop offset="1" stop-color="#0d0b0a"/>
+  </linearGradient>
+  <linearGradient id="hm-brassH" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#8a6a2c"/><stop offset="0.45" stop-color="#f1d98f"/><stop offset="1" stop-color="#9c7b38"/>
+  </linearGradient>
+  <radialGradient id="hm-brassR" cx="0.4" cy="0.35" r="0.75">
+    <stop offset="0" stop-color="#fff0b8"/><stop offset="0.5" stop-color="#d4b06a"/><stop offset="1" stop-color="#8a6a2c"/>
+  </radialGradient>
+  <linearGradient id="hm-sheen" x1="0" y1="1" x2="1" y2="0">
+    <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.55" stop-color="#fff" stop-opacity="0.16"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </linearGradient>
+  <filter id="hm-blur" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+  <clipPath id="hm-clipFront"><polygon points="130,560 750,560 750,400 130,400"/></clipPath>
+  <clipPath id="hm-clipTop"><polygon points="130,400 750,400 850,295 230,295"/></clipPath>
+</defs>
+<ellipse cx="520" cy="580" rx="395" ry="20" fill="#171513" opacity="0.5" filter="url(#hm-blur)"/>
+<g id="hm-bellows">
+<polygon points="830.0,295.0 886.0,245.0 886.0,363.0 830.0,413.0" fill="url(#hm-leatherSide)"/>
+<polygon points="250.0,295.0 830.0,295.0 886.0,245.0 306.0,245.0" fill="url(#hm-leather)"/>
+<polygon points="250.0,295.0 830.0,295.0 838.0,287.9 258.0,287.9" fill="#000" opacity="0.18"/>
+<polygon points="830.0,295.0 838.0,287.9 838.0,405.9 830.0,413.0" fill="#000" opacity="0.22"/>
+<line x1="258.0" y1="287.9" x2="838.0" y2="287.9" stroke="#a5503f" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="838.0" y1="287.9" x2="838.0" y2="405.9" stroke="#7a3328" stroke-opacity="0.6" stroke-width="1.2"/>
+<line x1="266.0" y1="280.7" x2="846.0" y2="280.7" stroke="#a5503f" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="846.0" y1="280.7" x2="846.0" y2="398.7" stroke="#7a3328" stroke-opacity="0.6" stroke-width="1.2"/>
+<polygon points="266.0,280.7 846.0,280.7 854.0,273.6 274.0,273.6" fill="#000" opacity="0.18"/>
+<polygon points="846.0,280.7 854.0,273.6 854.0,391.6 846.0,398.7" fill="#000" opacity="0.22"/>
+<line x1="274.0" y1="273.6" x2="854.0" y2="273.6" stroke="#a5503f" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="854.0" y1="273.6" x2="854.0" y2="391.6" stroke="#7a3328" stroke-opacity="0.6" stroke-width="1.2"/>
+<line x1="282.0" y1="266.4" x2="862.0" y2="266.4" stroke="#a5503f" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="862.0" y1="266.4" x2="862.0" y2="384.4" stroke="#7a3328" stroke-opacity="0.6" stroke-width="1.2"/>
+<polygon points="282.0,266.4 862.0,266.4 870.0,259.3 290.0,259.3" fill="#000" opacity="0.18"/>
+<polygon points="862.0,266.4 870.0,259.3 870.0,377.3 862.0,384.4" fill="#000" opacity="0.22"/>
+<line x1="290.0" y1="259.3" x2="870.0" y2="259.3" stroke="#a5503f" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="870.0" y1="259.3" x2="870.0" y2="377.3" stroke="#7a3328" stroke-opacity="0.6" stroke-width="1.2"/>
+<line x1="298.0" y1="252.1" x2="878.0" y2="252.1" stroke="#a5503f" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="878.0" y1="252.1" x2="878.0" y2="370.1" stroke="#7a3328" stroke-opacity="0.6" stroke-width="1.2"/>
+<polygon points="298.0,252.1 878.0,252.1 886.0,245.0 306.0,245.0" fill="#000" opacity="0.18"/>
+<polygon points="878.0,252.1 886.0,245.0 886.0,363.0 878.0,370.1" fill="#000" opacity="0.22"/>
+<line x1="306.0" y1="245.0" x2="886.0" y2="245.0" stroke="#a5503f" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="886.0" y1="245.0" x2="886.0" y2="363.0" stroke="#7a3328" stroke-opacity="0.6" stroke-width="1.2"/>
+<polyline points="306.0,245.0 886.0,245.0 886.0,363.0" fill="none" stroke="#c6a15b" stroke-width="2.2" stroke-opacity="0.85"/>
+<path d="M806.0,244.0 q-4,-26 22,-26 h38 q26,0 22,26" fill="none" stroke="#2b140e" stroke-width="9" stroke-linecap="round"/>
+<path d="M806.0,244.0 q-4,-26 22,-26 h38 q26,0 22,26" fill="none" stroke="#7a4a2c" stroke-width="4" stroke-linecap="round"/>
+</g>
+<polygon points="750,560 850,455 850,295 750,400" fill="url(#hm-side)"/>
+<polygon points="130,560 750,560 750,400 130,400" fill="url(#hm-front)"/>
+<polygon points="130,400 750,400 850,295 230,295" fill="url(#hm-top)"/>
+<g clip-path="url(#hm-clipFront)" fill="none" stroke-linecap="round"><path d="M130,403.8 C300,400.9 480,406.7 750,402.4" stroke="#b07a4a" stroke-opacity="0.15" stroke-width="1.3"/><path d="M130,411.4 C300,408.5 480,414.4 750,409.9" stroke="#2a150c" stroke-opacity="0.09" stroke-width="1.3"/><path d="M130,419.3 C300,415.8 480,422.8 750,417.6" stroke="#b07a4a" stroke-opacity="0.08" stroke-width="1.1"/><path d="M130,424.6 C300,421.0 480,428.1 750,422.8" stroke="#2a150c" stroke-opacity="0.13" stroke-width="0.8"/><path d="M130,435.5 C300,431.6 480,439.4 750,433.6" stroke="#b07a4a" stroke-opacity="0.13" stroke-width="1.4"/><path d="M130,439.6 C300,438.1 480,441.2 750,438.9" stroke="#2a150c" stroke-opacity="0.12" stroke-width="0.9"/><path d="M130,447.2 C300,445.1 480,449.3 750,446.1" stroke="#b07a4a" stroke-opacity="0.07" stroke-width="1.3"/><path d="M130,455.6 C300,452.0 480,459.2 750,453.8" stroke="#2a150c" stroke-opacity="0.12" stroke-width="1.4"/><path d="M130,463.2 C300,460.0 480,466.4 750,461.6" stroke="#b07a4a" stroke-opacity="0.11" stroke-width="1.1"/><path d="M130,472.6 C300,468.6 480,476.6 750,470.6" stroke="#2a150c" stroke-opacity="0.15" stroke-width="1.5"/><path d="M130,477.3 C300,475.2 480,479.3 750,476.2" stroke="#b07a4a" stroke-opacity="0.10" stroke-width="0.9"/><path d="M130,486.5 C300,484.0 480,489.0 750,485.2" stroke="#2a150c" stroke-opacity="0.15" stroke-width="1.2"/><path d="M130,494.6 C300,491.0 480,498.3 750,492.8" stroke="#b07a4a" stroke-opacity="0.07" stroke-width="1.0"/><path d="M130,501.8 C300,499.2 480,504.5 750,500.5" stroke="#2a150c" stroke-opacity="0.16" stroke-width="1.2"/><path d="M130,505.9 C300,502.8 480,509.0 750,504.4" stroke="#b07a4a" stroke-opacity="0.14" stroke-width="1.1"/><path d="M130,513.3 C300,511.0 480,515.7 750,512.2" stroke="#2a150c" stroke-opacity="0.16" stroke-width="1.6"/><path d="M130,520.9 C300,518.8 480,523.0 750,519.8" stroke="#b07a4a" stroke-opacity="0.08" stroke-width="0.9"/><path d="M130,531.0 C300,529.0 480,532.9 750,530.0" stroke="#2a150c" stroke-opacity="0.12" stroke-width="1.2"/><path d="M130,536.0 C300,532.6 480,539.3 750,534.3" stroke="#b07a4a" stroke-opacity="0.08" stroke-width="1.4"/><path d="M130,543.1 C300,540.5 480,545.6 750,541.8" stroke="#2a150c" stroke-opacity="0.09" stroke-width="1.1"/><path d="M130,553.9 C300,550.4 480,557.4 750,552.1" stroke="#b07a4a" stroke-opacity="0.10" stroke-width="1.7"/><path d="M130,558.2 C300,555.8 480,560.7 750,557.0" stroke="#2a150c" stroke-opacity="0.15" stroke-width="1.4"/></g>
+<g clip-path="url(#hm-clipTop)" fill="none" stroke-linecap="round"><path d="M130.0,400.0 C330.0,399.0 550.0,401.0 750.0,400.0" stroke="#d9a46c" stroke-opacity="0.14" stroke-width="0.9"/><path d="M136.7,393.0 C336.7,391.8 556.7,394.2 756.7,393.0" stroke="#2a150c" stroke-opacity="0.12" stroke-width="1.0"/><path d="M143.3,386.0 C343.3,384.7 563.3,387.3 763.3,386.0" stroke="#d9a46c" stroke-opacity="0.07" stroke-width="0.8"/><path d="M150.0,379.0 C350.0,377.2 570.0,380.8 770.0,379.0" stroke="#2a150c" stroke-opacity="0.08" stroke-width="1.2"/><path d="M156.7,372.0 C356.7,370.6 576.7,373.4 776.7,372.0" stroke="#d9a46c" stroke-opacity="0.10" stroke-width="1.5"/><path d="M163.3,365.0 C363.3,363.4 583.3,366.6 783.3,365.0" stroke="#2a150c" stroke-opacity="0.11" stroke-width="1.4"/><path d="M170.0,358.0 C370.0,356.9 590.0,359.1 790.0,358.0" stroke="#d9a46c" stroke-opacity="0.07" stroke-width="1.4"/><path d="M176.7,351.0 C376.7,348.8 596.7,353.2 796.7,351.0" stroke="#2a150c" stroke-opacity="0.08" stroke-width="0.9"/><path d="M183.3,344.0 C383.3,341.9 603.3,346.1 803.3,344.0" stroke="#d9a46c" stroke-opacity="0.14" stroke-width="0.9"/><path d="M190.0,337.0 C390.0,334.6 610.0,339.4 810.0,337.0" stroke="#2a150c" stroke-opacity="0.13" stroke-width="1.2"/><path d="M196.7,330.0 C396.7,328.5 616.7,331.5 816.7,330.0" stroke="#d9a46c" stroke-opacity="0.07" stroke-width="0.7"/><path d="M203.3,323.0 C403.3,320.6 623.3,325.4 823.3,323.0" stroke="#2a150c" stroke-opacity="0.08" stroke-width="1.3"/><path d="M210.0,316.0 C410.0,314.8 630.0,317.2 830.0,316.0" stroke="#d9a46c" stroke-opacity="0.13" stroke-width="1.2"/><path d="M216.7,309.0 C416.7,307.7 636.7,310.3 836.7,309.0" stroke="#2a150c" stroke-opacity="0.07" stroke-width="1.3"/><path d="M223.3,302.0 C423.3,301.1 643.3,302.9 843.3,302.0" stroke="#d9a46c" stroke-opacity="0.08" stroke-width="1.1"/><path d="M230.0,295.0 C430.0,292.8 650.0,297.2 850.0,295.0" stroke="#2a150c" stroke-opacity="0.11" stroke-width="0.9"/></g>
+<rect x="152" y="420" width="576" height="122" rx="4" fill="none" stroke="#c6a15b" stroke-width="2.2" stroke-opacity="0.9"/>
+<rect x="161" y="429" width="558" height="104" rx="3" fill="none" stroke="#c6a15b" stroke-width="1" stroke-opacity="0.6"/>
+<ellipse cx="440" cy="459" rx="8" ry="22" transform="rotate(0 440 481)" fill="none" stroke="#c6a15b" stroke-width="1.4" stroke-opacity="0.85"/>
+<ellipse cx="440" cy="459" rx="8" ry="22" transform="rotate(45 440 481)" fill="none" stroke="#c6a15b" stroke-width="1.4" stroke-opacity="0.85"/>
+<ellipse cx="440" cy="459" rx="8" ry="22" transform="rotate(90 440 481)" fill="none" stroke="#c6a15b" stroke-width="1.4" stroke-opacity="0.85"/>
+<ellipse cx="440" cy="459" rx="8" ry="22" transform="rotate(135 440 481)" fill="none" stroke="#c6a15b" stroke-width="1.4" stroke-opacity="0.85"/>
+<ellipse cx="440" cy="459" rx="8" ry="22" transform="rotate(180 440 481)" fill="none" stroke="#c6a15b" stroke-width="1.4" stroke-opacity="0.85"/>
+<ellipse cx="440" cy="459" rx="8" ry="22" transform="rotate(225 440 481)" fill="none" stroke="#c6a15b" stroke-width="1.4" stroke-opacity="0.85"/>
+<ellipse cx="440" cy="459" rx="8" ry="22" transform="rotate(270 440 481)" fill="none" stroke="#c6a15b" stroke-width="1.4" stroke-opacity="0.85"/>
+<ellipse cx="440" cy="459" rx="8" ry="22" transform="rotate(315 440 481)" fill="none" stroke="#c6a15b" stroke-width="1.4" stroke-opacity="0.85"/>
+<circle cx="440" cy="481" r="9" fill="url(#hm-brassR)"/>
+<circle cx="440" cy="481" r="38" fill="none" stroke="#c6a15b" stroke-width="1" stroke-opacity="0.5"/>
+<polygon points="230,463 244,481 230,499 216,481" fill="none" stroke="#c6a15b" stroke-width="1.6" stroke-opacity="0.85"/>
+<circle cx="230" cy="481" r="3" fill="#c6a15b"/>
+<polygon points="650,463 664,481 650,499 636,481" fill="none" stroke="#c6a15b" stroke-width="1.6" stroke-opacity="0.85"/>
+<circle cx="650" cy="481" r="3" fill="#c6a15b"/>
+<rect x="285" y="403" width="30" height="30" rx="4" fill="url(#hm-brassH)" stroke="#6d5320" stroke-width="1"/>
+<circle cx="300" cy="418" r="4.2" fill="#5a4318"/>
+<rect x="575" y="403" width="30" height="30" rx="4" fill="url(#hm-brassH)" stroke="#6d5320" stroke-width="1"/>
+<circle cx="590" cy="418" r="4.2" fill="#5a4318"/>
+<rect x="127" y="400" width="6" height="160" fill="url(#hm-brassH)" opacity="0.75"/>
+<rect x="747" y="400" width="6" height="160" fill="url(#hm-brassH)" opacity="0.75"/>
+<rect x="160" y="560" width="46" height="11" rx="2" fill="#1d0f08"/><rect x="674" y="560" width="46" height="11" rx="2" fill="#1d0f08"/>
+<line x1="130" y1="400.5" x2="750" y2="400.5" stroke="#e8c78f" stroke-width="1.6" stroke-opacity="0.7"/>
+<line x1="750" y1="400" x2="850" y2="295" stroke="#e8c78f" stroke-width="1.2" stroke-opacity="0.45"/>
+<line x1="750.0" y1="560.0" x2="750.0" y2="400.0" stroke="#000" stroke-opacity="0.1" stroke-width="1.2"/>
+<line x1="764.3" y1="545.0" x2="764.3" y2="385.0" stroke="#000" stroke-opacity="0.1" stroke-width="1.2"/>
+<line x1="778.6" y1="530.0" x2="778.6" y2="370.0" stroke="#000" stroke-opacity="0.1" stroke-width="1.2"/>
+<line x1="792.9" y1="515.0" x2="792.9" y2="355.0" stroke="#000" stroke-opacity="0.1" stroke-width="1.2"/>
+<line x1="807.1" y1="500.0" x2="807.1" y2="340.0" stroke="#000" stroke-opacity="0.1" stroke-width="1.2"/>
+<line x1="821.4" y1="485.0" x2="821.4" y2="325.0" stroke="#000" stroke-opacity="0.1" stroke-width="1.2"/>
+<line x1="835.7" y1="470.0" x2="835.7" y2="310.0" stroke="#000" stroke-opacity="0.1" stroke-width="1.2"/>
+<line x1="850.0" y1="455.0" x2="850.0" y2="295.0" stroke="#000" stroke-opacity="0.1" stroke-width="1.2"/>
+<line x1="776.0" y1="449.7" x2="824.0" y2="399.3" stroke="#000" stroke-opacity="0.35" stroke-width="7" stroke-linecap="round"/>
+<line x1="776.0" y1="444.7" x2="824.0" y2="394.3" stroke="url(#hm-brassH)" stroke-width="6" stroke-linecap="round"/>
+<circle cx="776.0" cy="444.7" r="5" fill="url(#hm-brassR)" stroke="#6d5320" stroke-width="0.8"/>
+<circle cx="824.0" cy="394.3" r="5" fill="url(#hm-brassR)" stroke="#6d5320" stroke-width="0.8"/>
+<polygon points="137.4,400.0 742.6,400.0 797.1,342.8 191.9,342.8" fill="#22120a"/>
+<polygon points="137.4,400.0 742.6,400.0 797.1,342.8 191.9,342.8" fill="none" stroke="#c6a15b" stroke-opacity="0.55" stroke-width="1.2"/>
+<polygon points="155.0,395.3 192.9,395.3 192.9,402.3 155.0,402.3" fill="#cdbd9d"/>
+<polygon points="155.0,395.3 192.9,395.3 238.4,347.5 200.5,347.5" fill="url(#hm-ivory)"/>
+<polygon points="196.6,395.3 234.5,395.3 234.5,402.3 196.6,402.3" fill="#cdbd9d"/>
+<polygon points="196.6,395.3 234.5,395.3 280.0,347.5 242.1,347.5" fill="url(#hm-ivory)"/>
+<polygon points="238.2,395.3 276.1,395.3 276.1,402.3 238.2,402.3" fill="#cdbd9d"/>
+<polygon points="238.2,395.3 276.1,395.3 321.6,347.5 283.7,347.5" fill="url(#hm-ivory)"/>
+<polygon points="279.9,395.3 317.7,395.3 317.7,402.3 279.9,402.3" fill="#cdbd9d"/>
+<polygon points="279.9,395.3 317.7,395.3 363.2,347.5 325.4,347.5" fill="url(#hm-ivory)"/>
+<polygon points="321.5,395.3 359.4,395.3 359.4,402.3 321.5,402.3" fill="#cdbd9d"/>
+<polygon points="321.5,395.3 359.4,395.3 404.9,347.5 367.0,347.5" fill="url(#hm-ivory)"/>
+<polygon points="363.1,395.3 401.0,395.3 401.0,402.3 363.1,402.3" fill="#cdbd9d"/>
+<polygon points="363.1,395.3 401.0,395.3 446.5,347.5 408.6,347.5" fill="url(#hm-ivory)"/>
+<polygon points="404.7,395.3 442.6,395.3 442.6,402.3 404.7,402.3" fill="#cdbd9d"/>
+<polygon points="404.7,395.3 442.6,395.3 488.1,347.5 450.2,347.5" fill="url(#hm-ivory)"/>
+<polygon points="446.4,395.3 484.3,395.3 484.3,402.3 446.4,402.3" fill="#cdbd9d"/>
+<polygon points="446.4,395.3 484.3,395.3 529.8,347.5 491.9,347.5" fill="url(#hm-ivory)"/>
+<polygon points="488.0,395.3 525.9,395.3 525.9,402.3 488.0,402.3" fill="#cdbd9d"/>
+<polygon points="488.0,395.3 525.9,395.3 571.4,347.5 533.5,347.5" fill="url(#hm-ivory)"/>
+<polygon points="529.6,395.3 567.5,395.3 567.5,402.3 529.6,402.3" fill="#cdbd9d"/>
+<polygon points="529.6,395.3 567.5,395.3 613.0,347.5 575.1,347.5" fill="url(#hm-ivory)"/>
+<polygon points="571.3,395.3 609.1,395.3 609.1,402.3 571.3,402.3" fill="#cdbd9d"/>
+<polygon points="571.3,395.3 609.1,395.3 654.6,347.5 616.8,347.5" fill="url(#hm-ivory)"/>
+<polygon points="612.9,395.3 650.8,395.3 650.8,402.3 612.9,402.3" fill="#cdbd9d"/>
+<polygon points="612.9,395.3 650.8,395.3 696.3,347.5 658.4,347.5" fill="url(#hm-ivory)"/>
+<polygon points="654.5,395.3 692.4,395.3 692.4,402.3 654.5,402.3" fill="#cdbd9d"/>
+<polygon points="654.5,395.3 692.4,395.3 737.9,347.5 700.0,347.5" fill="url(#hm-ivory)"/>
+<polygon points="696.1,395.3 734.0,395.3 734.0,402.3 696.1,402.3" fill="#cdbd9d"/>
+<polygon points="696.1,395.3 734.0,395.3 779.5,347.5 741.6,347.5" fill="url(#hm-ivory)"/>
+<polygon points="206.9,375.8 231.0,375.8 255.5,350.1 231.4,350.1" fill="#000" opacity="0.28"/>
+<polygon points="203.7,373.2 227.8,373.2 227.8,379.2 203.7,379.2" fill="#4a403a"/>
+<polygon points="203.7,373.2 227.8,373.2 252.3,347.5 228.2,347.5" fill="url(#hm-ebony)"/>
+<polygon points="248.5,375.8 272.6,375.8 297.1,350.1 273.0,350.1" fill="#000" opacity="0.28"/>
+<polygon points="245.3,373.2 269.4,373.2 269.4,379.2 245.3,379.2" fill="#4a403a"/>
+<polygon points="245.3,373.2 269.4,373.2 293.9,347.5 269.8,347.5" fill="url(#hm-ebony)"/>
+<polygon points="331.7,375.8 355.9,375.8 380.4,350.1 356.2,350.1" fill="#000" opacity="0.28"/>
+<polygon points="328.5,373.2 352.7,373.2 352.7,379.2 328.5,379.2" fill="#4a403a"/>
+<polygon points="328.5,373.2 352.7,373.2 377.2,347.5 353.0,347.5" fill="url(#hm-ebony)"/>
+<polygon points="373.4,375.8 397.5,375.8 422.0,350.1 397.9,350.1" fill="#000" opacity="0.28"/>
+<polygon points="370.2,373.2 394.3,373.2 394.3,379.2 370.2,379.2" fill="#4a403a"/>
+<polygon points="370.2,373.2 394.3,373.2 418.8,347.5 394.7,347.5" fill="url(#hm-ebony)"/>
+<polygon points="415.0,375.8 439.1,375.8 463.6,350.1 439.5,350.1" fill="#000" opacity="0.28"/>
+<polygon points="411.8,373.2 435.9,373.2 435.9,379.2 411.8,379.2" fill="#4a403a"/>
+<polygon points="411.8,373.2 435.9,373.2 460.4,347.5 436.3,347.5" fill="url(#hm-ebony)"/>
+<polygon points="498.3,375.8 522.4,375.8 546.9,350.1 522.8,350.1" fill="#000" opacity="0.28"/>
+<polygon points="495.1,373.2 519.2,373.2 519.2,379.2 495.1,379.2" fill="#4a403a"/>
+<polygon points="495.1,373.2 519.2,373.2 543.7,347.5 519.6,347.5" fill="url(#hm-ebony)"/>
+<polygon points="539.9,375.8 564.0,375.8 588.5,350.1 564.4,350.1" fill="#000" opacity="0.28"/>
+<polygon points="536.7,373.2 560.8,373.2 560.8,379.2 536.7,379.2" fill="#4a403a"/>
+<polygon points="536.7,373.2 560.8,373.2 585.3,347.5 561.2,347.5" fill="url(#hm-ebony)"/>
+<polygon points="623.1,375.8 647.3,375.8 671.8,350.1 647.6,350.1" fill="#000" opacity="0.28"/>
+<polygon points="619.9,373.2 644.1,373.2 644.1,379.2 619.9,379.2" fill="#4a403a"/>
+<polygon points="619.9,373.2 644.1,373.2 668.6,347.5 644.4,347.5" fill="url(#hm-ebony)"/>
+<polygon points="664.8,375.8 688.9,375.8 713.4,350.1 689.3,350.1" fill="#000" opacity="0.28"/>
+<polygon points="661.6,373.2 685.7,373.2 685.7,379.2 661.6,379.2" fill="#4a403a"/>
+<polygon points="661.6,373.2 685.7,373.2 710.2,347.5 686.1,347.5" fill="url(#hm-ebony)"/>
+<polygon points="706.4,375.8 730.5,375.8 755.0,350.1 730.9,350.1" fill="#000" opacity="0.28"/>
+<polygon points="703.2,373.2 727.3,373.2 727.3,379.2 703.2,379.2" fill="#4a403a"/>
+<polygon points="703.2,373.2 727.3,373.2 751.8,347.5 727.7,347.5" fill="url(#hm-ebony)"/>
+<polygon points="186.0,341.2 806.0,341.2 806.0,327.2 186.0,327.2" fill="#4a2814"/>
+<polygon points="806.0,341.2 850.0,295.0 850.0,281.0 806.0,327.2" fill="#3a1f10"/>
+<polygon points="186.0,327.2 806.0,327.2 850.0,281.0 230.0,281.0" fill="url(#hm-fascia)"/>
+<line x1="186.0" y1="327.2" x2="806.0" y2="327.2" stroke="#e8c78f" stroke-width="1.3" stroke-opacity="0.6"/>
+<polygon points="208.5,319.9 797.5,319.9 831.0,284.7 242.0,284.7" fill="none" stroke="#c6a15b" stroke-width="1.2" stroke-opacity="0.75"/>
+<polygon points="488.4,315.6 705.4,315.6 731.4,288.4 514.4,288.4" fill="#160b06"/>
+<line x1="499.7" y1="313.6" x2="698.1" y2="313.6" stroke="#c6a15b" stroke-width="2.3" stroke-opacity="0.9" stroke-linecap="round"/>
+<line x1="503.4" y1="309.7" x2="701.8" y2="309.7" stroke="#c6a15b" stroke-width="2.3" stroke-opacity="0.9" stroke-linecap="round"/>
+<line x1="507.0" y1="305.9" x2="705.4" y2="305.9" stroke="#c6a15b" stroke-width="2.3" stroke-opacity="0.9" stroke-linecap="round"/>
+<line x1="510.7" y1="302.0" x2="709.1" y2="302.0" stroke="#c6a15b" stroke-width="2.3" stroke-opacity="0.9" stroke-linecap="round"/>
+<line x1="514.4" y1="298.1" x2="712.8" y2="298.1" stroke="#c6a15b" stroke-width="2.3" stroke-opacity="0.9" stroke-linecap="round"/>
+<line x1="518.0" y1="294.3" x2="716.4" y2="294.3" stroke="#c6a15b" stroke-width="2.3" stroke-opacity="0.9" stroke-linecap="round"/>
+<line x1="521.7" y1="290.4" x2="720.1" y2="290.4" stroke="#c6a15b" stroke-width="2.3" stroke-opacity="0.9" stroke-linecap="round"/>
+<polygon points="488.4,315.6 705.4,315.6 731.4,288.4 514.4,288.4" fill="none" stroke="#d9b974" stroke-width="1.6"/>
+<ellipse cx="254.9" cy="307.1" rx="10.5" ry="5.5" fill="#000" opacity="0.38"/>
+<rect x="242.9" y="298.1" width="19.0" height="6.0" fill="url(#hm-brassH)"/>
+<ellipse cx="252.4" cy="304.1" rx="9.5" ry="5.5" fill="#8a6a2c"/>
+<ellipse cx="252.4" cy="298.1" rx="9.5" ry="5.5" fill="url(#hm-brassR)"/>
+<ellipse cx="252.4" cy="298.1" rx="4.6" ry="2.6" fill="#8f6f30" opacity="0.65"/>
+<ellipse cx="293.3" cy="307.1" rx="10.5" ry="5.5" fill="#000" opacity="0.38"/>
+<rect x="281.3" y="298.1" width="19.0" height="6.0" fill="url(#hm-brassH)"/>
+<ellipse cx="290.8" cy="304.1" rx="9.5" ry="5.5" fill="#8a6a2c"/>
+<ellipse cx="290.8" cy="298.1" rx="9.5" ry="5.5" fill="url(#hm-brassR)"/>
+<ellipse cx="290.8" cy="298.1" rx="4.6" ry="2.6" fill="#8f6f30" opacity="0.65"/>
+<ellipse cx="331.8" cy="307.1" rx="10.5" ry="5.5" fill="#000" opacity="0.38"/>
+<rect x="319.8" y="298.1" width="19.0" height="6.0" fill="url(#hm-brassH)"/>
+<ellipse cx="329.3" cy="304.1" rx="9.5" ry="5.5" fill="#8a6a2c"/>
+<ellipse cx="329.3" cy="298.1" rx="9.5" ry="5.5" fill="url(#hm-brassR)"/>
+<ellipse cx="329.3" cy="298.1" rx="4.6" ry="2.6" fill="#8f6f30" opacity="0.65"/>
+<ellipse cx="370.2" cy="307.1" rx="10.5" ry="5.5" fill="#000" opacity="0.38"/>
+<rect x="358.2" y="298.1" width="19.0" height="6.0" fill="url(#hm-brassH)"/>
+<ellipse cx="367.7" cy="304.1" rx="9.5" ry="5.5" fill="#8a6a2c"/>
+<ellipse cx="367.7" cy="298.1" rx="9.5" ry="5.5" fill="url(#hm-brassR)"/>
+<ellipse cx="367.7" cy="298.1" rx="4.6" ry="2.6" fill="#8f6f30" opacity="0.65"/>
+<ellipse cx="408.7" cy="307.1" rx="10.5" ry="5.5" fill="#000" opacity="0.38"/>
+<rect x="396.7" y="298.1" width="19.0" height="6.0" fill="url(#hm-brassH)"/>
+<ellipse cx="406.2" cy="304.1" rx="9.5" ry="5.5" fill="#8a6a2c"/>
+<ellipse cx="406.2" cy="298.1" rx="9.5" ry="5.5" fill="url(#hm-brassR)"/>
+<ellipse cx="406.2" cy="298.1" rx="4.6" ry="2.6" fill="#8f6f30" opacity="0.65"/>
+<ellipse cx="447.1" cy="307.1" rx="10.5" ry="5.5" fill="#000" opacity="0.38"/>
+<rect x="435.1" y="298.1" width="19.0" height="6.0" fill="url(#hm-brassH)"/>
+<ellipse cx="444.6" cy="304.1" rx="9.5" ry="5.5" fill="#8a6a2c"/>
+<ellipse cx="444.6" cy="298.1" rx="9.5" ry="5.5" fill="url(#hm-brassR)"/>
+<ellipse cx="444.6" cy="298.1" rx="4.6" ry="2.6" fill="#8f6f30" opacity="0.65"/>
+<ellipse cx="779.4" cy="303.1" rx="19" ry="11" fill="#2a140a"/>
+<ellipse cx="779.4" cy="303.1" rx="19" ry="11" fill="none" stroke="#c6a15b" stroke-width="1.4"/>
+<ellipse cx="781.9" cy="308.1" rx="13.5" ry="7.2" fill="#000" opacity="0.38"/>
+<rect x="766.9" y="297.1" width="25.0" height="8.0" fill="url(#hm-brassH)"/>
+<ellipse cx="779.4" cy="305.1" rx="12.5" ry="7.2" fill="#8a6a2c"/>
+<ellipse cx="779.4" cy="297.1" rx="12.5" ry="7.2" fill="url(#hm-brassR)"/>
+<ellipse cx="779.4" cy="297.1" rx="6.0" ry="3.5" fill="#8f6f30" opacity="0.65"/>
+<polygon points="130,400 750,400 850,295 230,295" fill="url(#hm-sheen)"/>
+<g id="hm-hl-air" opacity="0" pointer-events="none">
+  <rect x="152" y="420" width="576" height="122" rx="6" fill="#C6A15B" fill-opacity="0.12" stroke="#F1D98F" stroke-width="2.4" stroke-dasharray="9 7"/>
+</g>
+</svg>
+          <img class="hm-photo" id="hm-photo" alt="A traditional Indian harmonium" decoding="async" hidden>
+          <div class="hotspots" id="hotspots"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main id="story">
+
+    <!-- 01 · HERO -->
+    <section class="panel side-left" id="hero" data-theme="ivory" aria-labelledby="hero-title">
+      <span class="numeral" aria-hidden="true">01</span>
+      <div class="copy">
+        <p class="eyebrow reveal">Free-reed keyboard · Hand-pumped · Played across South Asia</p>
+        <h1 id="hero-title" class="reveal">The Soul of the <em>Harmonium</em></h1>
+        <p class="lead reveal">Discover the instrument that breathes life into melodies, devotion, and musical traditions.</p>
+        <p class="reveal">The harmonium makes sound from moving air. One hand works a bellows, the other plays the keys, and thin metal reeds sing as the air rushes past them. Developed in nineteenth-century Europe and reshaped by Indian makers into a compact, hand-pumped instrument, it now supports voices in homes, concert halls, temples, gurdwaras and studios.</p>
+        <div class="cta-row reveal">
+          <a class="btn btn-primary" href="#history" data-scroll>Explore the Instrument</a>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#history" data-scroll aria-label="Scroll down to history"><span>Scroll</span><i aria-hidden="true"></i></a>
+    </section>
+
+    <!-- 02 · HISTORY -->
+    <section class="panel side-right" id="history" data-theme="cream" aria-labelledby="history-title">
+      <span class="numeral" aria-hidden="true">02</span>
+      <div class="copy">
+        <p class="eyebrow reveal">History &amp; origins</p>
+        <h2 id="history-title" class="reveal">A Journey Through Time</h2>
+        <p class="reveal">The harmonium grew from the <em>free reed</em>, a thin tongue of metal that vibrates freely through a slot. The idea, familiar from the Chinese <i>sheng</i>, reached Europe in the 1700s; in Paris it became the pedal-pumped harmonium of 1840. India later gave it a second life.</p>
+        <ol class="timeline reveal">
+          <li><time>1700s</time><span>The free-reed principle travels to Europe via Russia and inspires new keyboard instruments.</span></li>
+          <li><time>c. 1810</time><span>Gabriel-Joseph Grenié exhibits his <i>orgue expressif</i> in Paris.</span></li>
+          <li><time>1840</time><span>Alexandre Debain patents the <i>harmonium</i>, a foot-pumped instrument with stops for tone colour.</span></li>
+          <li><time>Mid-1800s</time><span>Reed organs arrive in India with missionaries, traders and colonial households.</span></li>
+          <li><time>1875</time><span>Harmoniums are first made in India, in Calcutta. Dwarkanath Ghose is widely credited with shaping the compact, hand-pumped form played today.</span></li>
+          <li><time>1940–71</time><span>All India Radio restricts the harmonium, arguing its fixed pitches cannot render microtones and gamakas; accompaniment is permitted from 1971. Sources differ on exact dates.</span></li>
+        </ol>
+        <div class="compare reveal">
+          <article>
+            <h3>European harmonium</h3>
+            <p>A foot-pedalled parlour and church instrument; both hands stay free for the keys.</p>
+          </article>
+          <article>
+            <h3>Indian hand-harmonium</h3>
+            <p>Compact, played from the floor, with drone stops; the left hand pumps while the right plays.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 · ANATOMY -->
+    <section class="panel side-left" id="anatomy" data-theme="ivory" aria-labelledby="anatomy-title">
+      <span class="numeral" aria-hidden="true">03</span>
+      <div class="copy">
+        <p class="eyebrow reveal">Anatomy</p>
+        <h2 id="anatomy-title" class="reveal">Every Part Has a Purpose</h2>
+        <p class="reveal">Select a glowing point on the instrument, or a name below, to see what each part does. Layouts differ from maker to maker, so treat this as a typical portable model.</p>
+
+        <!-- Source of truth for the explanations; script.js turns this into chips + a detail card. -->
+        <dl class="part-dl reveal" id="part-dl">
+          <div data-part="keyboard"><dt>Keyboard</dt><dd>Portable models commonly span about three to three-and-a-half octaves, laid out like a piano's. Each key lifts a small pad valve so air can reach one reed. Pressing, not striking, gives a smooth, sustained tone.</dd></div>
+          <div data-part="bellows"><dt>Bellows</dt><dd>Sitting at the back, the bellows are worked by the left hand. Each stroke pressurises an inner reservoir (springs help the bellows reopen), and how steadily you pump shapes the loudness and smoothness of the sound.</dd></div>
+          <div data-part="reeds"><dt>Reeds</dt><dd>Each note has a slim brass tongue fixed over a slot in a metal frame. Air sets the tongue swinging through the slot, and its length and thickness decide the pitch. Reeds sit in rows, called ranks, in chambers beneath the keyboard.</dd></div>
+          <div data-part="stops"><dt>Stops</dt><dd>Stop knobs open or close extra ranks of reeds, such as an octave higher, so the player can change loudness and tone colour. The number and function of stops vary widely between instruments.</dd></div>
+          <div data-part="drone"><dt>Drone knobs</dt><dd>Many Indian harmoniums have a drone control that keeps a few reeds sounding continuously, giving a tanpura-like background. Which notes drone, and whether the feature exists at all, depends on the instrument.</dd></div>
+          <div data-part="chamber"><dt>Air chamber</dt><dd>Inside the case, a chamber collects the air from the bellows and feeds it evenly to the reeds, smoothing out the pumping strokes. Flap valves in the bellows stop the air escaping backwards.</dd></div>
+          <div data-part="body"><dt>Wooden body</dt><dd>The seasoned wooden case protects the delicate reeds and valves, helps shape the tone, and in many portable models folds shut with latches and a handle for carrying.</dd></div>
+        </dl>
+
+        <div class="parts reveal" id="parts" hidden>
+          <ul class="chips" id="part-chips" role="list"></ul>
+          <div class="part-card" id="part-card" aria-live="polite">
+            <p class="part-count" id="part-count"></p>
+            <h3 id="part-title"></h3>
+            <p id="part-text"></p>
+            <button class="btn btn-ghost btn-small" id="part-next" type="button">Next part &rarr;</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 · MECHANISM -->
+    <section class="panel side-right" id="mechanism" data-theme="walnut" aria-labelledby="mechanism-title">
+      <span class="numeral" aria-hidden="true">04</span>
+      <div class="copy">
+        <p class="eyebrow reveal">How it works</p>
+        <h2 id="mechanism-title" class="reveal">Where Air Becomes Music</h2>
+        <p class="reveal">Every note is a short journey for a puff of air. Pump the bellows and air gathers in the chamber; press a key and a valve opens a path to one reed; the reed vibrates and the air leaves as sound.</p>
+
+        <figure class="airflow-fig reveal">
+          <svg id="airflow" class="airflow is-pressed" viewBox="0 0 640 270" role="img" aria-labelledby="af-title af-desc">
+            <title id="af-title">Airflow inside a harmonium</title>
+            <desc id="af-desc">Air is pumped from the bellows into the air chamber. When a key is pressed, a valve opens, air flows past a reed, the reed vibrates and sound leaves the instrument.</desc>
+
+            <!-- case outline (cutaway) -->
+            <rect class="af-case" x="14" y="40" width="500" height="190" rx="14"/>
+
+            <!-- bellows -->
+            <g class="af-bellows">
+              <polygon class="af-leather" points="28,74 124,92 124,188 28,206"/>
+              <g class="af-pleats"><path d="M52,78 V202"/><path d="M76,82 V198"/><path d="M100,87 V193"/></g>
+            </g>
+            <path class="af-pipe" d="M124,140 H180"/>
+
+            <!-- air chamber -->
+            <rect class="af-chamber" x="180" y="82" width="150" height="116" rx="14"/>
+            <!-- valve pad + key + rod -->
+            <rect class="af-pad" x="327" y="118" width="7" height="46" rx="2"/>
+            <path class="af-rod" d="M331,164 V238"/>
+            <rect class="af-key" x="300" y="238" width="104" height="18" rx="3"/>
+
+            <!-- reed chamber -->
+            <rect class="af-reedbox" x="334" y="92" width="140" height="96" rx="10"/>
+            <path class="af-plate" d="M402,100 V132 M402,148 V180"/>
+            <rect class="af-tongue" x="402" y="137" width="44" height="6" rx="2"/>
+
+            <!-- sound -->
+            <g class="af-waves">
+              <path d="M492,112 q16,28 0,56"/><path d="M512,98 q24,42 0,84"/><path d="M534,84 q32,56 0,112"/>
+            </g>
+
+            <!-- air particles: stage 1 (bellows to chamber) always moves; stage 2 (through the valve and over the reed) only when a key is pressed -->
+            <g class="af-air af-air-1">
+              <circle r="3.6"><animateMotion dur="1.5s" repeatCount="indefinite" begin="-0.0s" path="M124,140 L252,140"/></circle>
+              <circle r="3.6"><animateMotion dur="1.5s" repeatCount="indefinite" begin="-0.5s" path="M124,140 L252,140"/></circle>
+              <circle r="3.6"><animateMotion dur="1.5s" repeatCount="indefinite" begin="-1.0s" path="M124,140 L252,140"/></circle>
+            </g>
+            <g class="af-air af-air-2">
+              <circle r="3.6"><animateMotion dur="1.4s" repeatCount="indefinite" begin="-0.0s" path="M262,140 L334,140 L440,140 L486,140"/></circle>
+              <circle r="3.6"><animateMotion dur="1.4s" repeatCount="indefinite" begin="-0.35s" path="M262,140 L334,140 L440,140 L486,140"/></circle>
+              <circle r="3.6"><animateMotion dur="1.4s" repeatCount="indefinite" begin="-0.7s" path="M262,140 L334,140 L440,140 L486,140"/></circle>
+              <circle r="3.6"><animateMotion dur="1.4s" repeatCount="indefinite" begin="-1.05s" path="M262,140 L334,140 L440,140 L486,140"/></circle>
+            </g>
+
+            <!-- labels -->
+            <g class="af-labels">
+              <text x="76" y="228" text-anchor="middle">Bellows</text>
+              <text x="255" y="68" text-anchor="middle">Air chamber</text>
+              <text x="404" y="78" text-anchor="middle">Reed</text>
+              <text x="452" y="252" text-anchor="start">Key</text>
+              <text x="320" y="112" text-anchor="end" class="af-label-valve">Valve</text>
+              <text x="540" y="74" text-anchor="middle">Sound</text>
+            </g>
+          </svg>
+          <figcaption>
+            <button class="btn btn-ghost btn-small" id="af-toggle" type="button" aria-pressed="true">Release the key</button>
+            <span>Press and release to see the valve, reed and air respond.</span>
+          </figcaption>
+        </figure>
+
+        <ol class="steps reveal">
+          <li><b>Pump.</b> The bellows pressurise the air chamber, which keeps the pressure even.</li>
+          <li><b>Press.</b> A key lifts a pad valve and opens a path to a single reed.</li>
+          <li><b>Vibrate.</b> The reed swings through its slot, chopping the airflow into sound waves.</li>
+        </ol>
+        <p class="note reveal">Stops and drone controls vary from instrument to instrument: they open extra reed ranks or keep certain reeds sounding, and some harmoniums have neither.</p>
+      </div>
+    </section>
+
+    <!-- 05 · PLAY -->
+    <section class="panel side-left" id="play" data-theme="ivory" aria-labelledby="play-title">
+      <span class="numeral" aria-hidden="true">05</span>
+      <div class="copy">
+        <p class="eyebrow reveal">Learn to play</p>
+        <h2 id="play-title" class="reveal">Feel Every Note</h2>
+        <p class="reveal">The keys follow the piano pattern: the pair of black keys sits just right of <b>C</b>. In Indian notation the seven notes are <i>Sa Re Ga Ma Pa Dha Ni</i>, and in this demo Sa is C.</p>
+
+        <ul class="tips reveal">
+          <li><b>Fingers.</b> Right hand, fingers curved and relaxed. On a rising scale, pass the thumb under after the third finger.</li>
+          <li><b>Bellows.</b> Left hand pumps in short, even strokes. Top up before you run low rather than pumping hard at the end.</li>
+        </ul>
+
+        <div class="piano-wrap reveal" id="piano-wrap">
+          <div class="piano-bar">
+            <div class="air" aria-label="Bellows air level">
+              <span class="air-label">Air</span>
+              <span class="air-track"><span class="air-fill" id="air-fill"></span></span>
+              <button class="btn btn-small btn-primary" id="pump" type="button" title="Pump the bellows (B)">Pump <kbd>B</kbd></button>
+            </div>
+            <div class="demo">
+              <label class="sr-only" for="exercise">Practice exercise</label>
+              <select id="exercise">
+                <option value="scale">Scale: Sa Re Ga Ma Pa Dha Ni Sa&prime;</option>
+                <option value="alankar">Alankar: Sa Re Ga, Re Ga Ma…</option>
+                <option value="bhupali">Bhupali: Sa Re Ga Pa Dha</option>
+              </select>
+              <button class="btn btn-small btn-ghost" id="demo-play" type="button">Play demo</button>
+            </div>
+          </div>
+          <div class="piano" id="piano" role="group" aria-label="Virtual harmonium keyboard"></div>
+          <p class="piano-status" id="piano-status" aria-live="polite">Tap a key, or use your keyboard: A S D F G H J K L ; for white keys, W E T Y U O P for black.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 · CULTURE -->
+    <section class="panel side-right" id="culture" data-theme="cream" aria-labelledby="culture-title">
+      <span class="numeral" aria-hidden="true">06</span>
+      <div class="copy">
+        <p class="eyebrow reveal">Music, devotion &amp; culture</p>
+        <h2 id="culture-title" class="reveal">More Than an Instrument</h2>
+        <p class="reveal">Because it is portable, affordable and holds a steady pitch, the harmonium has become a companion to the human voice in many South Asian traditions, though never in all of them.</p>
+        <ul class="trad-list reveal" role="list">
+          <li><h3>Hindustani &amp; semi-classical</h3><p>Often accompanies vocalists, and appears in light-classical forms such as thumri and ghazal. Its fixed tuning has long been debated, since it cannot bend notes the way a voice or sarangi can.</p></li>
+          <li><h3>Bhajan &amp; kirtan</h3><p>In many homes, temples and community gatherings, it anchors devotional singing, giving singers their pitch and a continuous harmonic bed.</p></li>
+          <li><h3>Gurbani Kirtan</h3><p>The harmonium, often called <i>vaja</i>, commonly accompanies ragis alongside the tabla. Some Sikh musicians and institutions also encourage the older stringed instruments, so practice varies.</p></li>
+          <li><h3>Qawwali &amp; community song</h3><p>It is central to qawwali's devotional ensembles, and it appears in many regional folk, stage and classroom settings.</p></li>
+        </ul>
+        <p class="note reveal">The harmonium is widespread, not universal: it is less typical in Carnatic concerts, and some musicians still prefer other instruments for their own reasons.</p>
+      </div>
+    </section>
+
+    <!-- 07 · FINALE -->
+    <section class="panel finale" id="finale" data-theme="charcoal" aria-labelledby="finale-title">
+      <span class="numeral" aria-hidden="true">07</span>
+      <div class="copy copy-top">
+        <p class="eyebrow reveal">Epilogue</p>
+        <h2 id="finale-title" class="reveal">Every Breath Tells a Story</h2>
+      </div>
+      <div class="copy copy-bottom">
+        <p class="reveal">From a French workshop to the floors of Indian homes and sacred halls, the harmonium has travelled by being adaptable: a bellows, a row of reeds, and the breath of the person who plays it. It carries melody, prayer and companionship, and reminds us that an instrument's meaning is made by the people who sing with it.</p>
+        <div class="cta-row reveal">
+          <a class="btn btn-primary" href="#history" data-scroll>Explore Again</a>
+          <a class="btn btn-ghost" href="#hero" data-scroll>Back to Top</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="footer">
+    <div class="footer-inner">
+      <div>
+        <p class="footer-brand"><span aria-hidden="true">&#9834;</span> The Soul of the Harmonium</p>
+        <p class="footer-small">An educational storytelling site. Historical points are summarised from published histories; details of early arrival in India are still discussed by scholars.</p>
+      </div>
+      <div>
+        <p class="footer-head">Further reading</p>
+        <ul class="footer-links">
+          <li><a href="https://www.indianculture.gov.in/musical-instruments/sushir-vadya/harmonium" target="_blank" rel="noopener">Indian Culture portal: Harmonium</a></li>
+          <li><a href="https://en.wikipedia.org/wiki/Indian_harmonium" target="_blank" rel="noopener">Indian harmonium (overview)</a></li>
+          <li><a href="https://www.cambridge.org/core/journals/journal-of-asian-studies/article/abs/that-bane-of-indian-music-hearing-politics-in-the-harmonium/7A9AC6197EF4E1395E02591FE1C0DAB5" target="_blank" rel="noopener">Rahaim, “That Ban(e) of Indian Music”</a></li>
+          <li><a href="https://amis.mircat.org/jamis/2018_144.pdf" target="_blank" rel="noopener">The Origins of the “Indian” Harmonium (JAMIS)</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-end">Built with HTML, CSS, JavaScript and GSAP · Keyboard sounds are synthesised in your browser.</p>
+  </footer>
+
+  <noscript><p class="noscript">JavaScript powers the scroll animation and the interactive keyboard. The text content above remains fully readable without it.</p></noscript>
+</body>
+</html>
